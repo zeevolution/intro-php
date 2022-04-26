@@ -22,6 +22,12 @@
     echo "Usuário do Sistema Operacional: ".get_current_user()."<br/>"
 ?>
 
+<?php
+    $serverInfo = array("nome_da_maquina" => php_uname("n"), "os"=> php_uname("s"), "versao"=> php_uname("v"), "usuario" => get_current_user());
+
+    echo json_encode($serverInfo);
+?>
+
 <!DOCTYPE html>
     <html>
     <head>
