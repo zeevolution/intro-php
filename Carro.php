@@ -1,6 +1,5 @@
 <?php
     class Car {
-
         private $brand;
         private $model;
         private $color;
@@ -42,7 +41,7 @@
         }
 
         public function getColor() {
-            return $this->model;
+            return $this->color;
         }
 
         public function getLicenseNumber() {
@@ -71,7 +70,11 @@
 
     }
 
-    $myCar = new Car("fiat", "uno", "vermelho", "BRAOS17");
+    $myCar = new Car("fiat", "uno", "branca", "BRAOS17");
+
+    // Chamar a url com parametros
+    //$myCar = new Car($_GET['brand'], $_GET['model'],
+    //    $_GET['color'], $_GET['licenseNumber']);
 
     echo 'A marca de $myCar é '.$myCar->getBrand().'<br />';
 
@@ -79,5 +82,48 @@
 
     echo 'A marca de $myCar é '.$myCar->getBrand().'<br />';
 
-    echo $myCar->turnOn();
+    echo $myCar->turnOn()."<br />";
+
+    require_once 'conexao.php';
+
+    $connection = connectToCarDatabase();
+
+    // insert a single publisher
+    $sqlInsertCar = 'INSERT INTO cars(brand, model, color, licenseNumber)
+        VALUES(:brand, :model, :color, :licenseNumber)';
+
+    $insertStatement = $connection->prepare($sqlInsertCar);
+
+    $insertStatement->execute([
+        ':brand' => $myCar->getBrand(),
+        ':model' => $myCar->getModel(),
+        ':color' => $myCar->getColor(),
+        'licenseNumber' => $myCar->getLicenseNumber()
+    ]);
+
+    $carId = $connection->lastInsertId();
+
+    echo "O carro de id ". $carId . " foi inserido com sucesso"."<br/>";
+
+    echo "<h3>Todos os carros inseridos no banco de dados</h3>";
+
+    $sqlReadAllCars = 'SELECT brand, model, color, licenseNumber FROM cars';
+
+    $readStatement = $connection->query($sqlReadAllCars);
+
+    // get all cars
+    $cars = $readStatement->fetchAll(PDO::FETCH_ASSOC);
+
+    if (sizeof($cars) > 0) {
+        // show the cars
+        foreach ($cars as $car) {
+            echo " Marca:". $car['brand'];
+            echo " Modelo:". $car['model'];
+            echo " Cor:". $car['color'];
+            echo " Placa:". $car['licenseNumber']."<br />";
+        }
+    } else {
+        echo "Não há carro no banco de dados";
+    }
+
 ?>
