@@ -14,7 +14,7 @@
 	    }
 
         public function turnOn() {
-            echo "Carro ligaado...";
+            echo "Carro ligando...";
         }
 
         public function turnOff() {
@@ -77,5 +77,7 @@
 
     echo 'Mudando a marca de $myCar...'.$myCar->setBrand("Ferrari").'<br />';
 
-    echo 'A marca de $myCar é '.$myCar->getBrand().'<br />'; 
+    echo 'A marca de $myCar é '.$myCar->getBrand().'<br />';
+
+    echo $myCar->turnOn();
 ?>
