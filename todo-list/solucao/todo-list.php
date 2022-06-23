@@ -20,7 +20,7 @@
                     $errors = "Você deve preencher uma descrição da tarefa";
                 } else { 
                     $task = $_POST['task'];
-                    $sqlInsertTask = "INSERT INTO tasks(task) VALUES('$task')";
+                    $sqlInsertTask = 'INSERT INTO tasks(task) VALUES(:task)';
                     $insertTaskStatement = $connection->prepare($sqlInsertTask);
                     $insertTaskStatement->execute([
                         ':task' => $task,
